@@ -1,0 +1,84 @@
+package reader
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+	"sync"
+)
+
+type Reader interface {
+	ReadFile(filePath string, chunkSize int) (string, error)
+}
+
+type FileReader struct{}
+
+func NewFileReader() Reader {
+	return &FileReader{}
+}
+
+func (fr *FileReader) ReadFile(filePath string, chunkSize int) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return "nil", fmt.Errorf("failed to get file info: %w", err)
+	}
+	fileSize := fileInfo.Size()
+
+	numChunks := int(fileSize) / chunkSize
+	if fileSize%int64(chunkSize) != 0 {
+		numChunks++
+	}
+	fmt.Printf("numChunks: %d\n", numChunks)
+
+	var wg sync.WaitGroup
+	results := make(chan string, numChunks)
+
+	for i := range numChunks {
+		wg.Add(1)
+		go func(chunkIndex int) {
+			defer wg.Done()
+
+			offset := int64(chunkIndex) * int64(chunkSize)
+
+			chunkData, err := fr.readChunk(file, offset, chunkSize)
+			if err != nil {
+				fmt.Printf("Error reading chunk %d: %v\n", chunkIndex, err)
+				return
+			}
+
+			results <- chunkData
+		}(i)
+	}
+
+	wg.Wait()
+	close(results)
+
+	var output string
+	for result := range results {
+		output += result
+	}
+	return output, nil
+}
+
+func (fr *FileReader) readChunk(file *os.File, offset int64, chunkSize int) (string, error) {
+	buffer := make([]byte, chunkSize)
+
+	_, err := file.Seek(offset, io.SeekStart)
+	if err != nil {
+		return "", fmt.Errorf("failed to seek to offset %d: %w", offset, err)
+	}
+
+	n, err := file.Read(buffer)
+	if err != nil && err != io.EOF {
+		return "", fmt.Errorf("failed to read chunk at offset %d: %w", offset, err)
+	}
+
+	return string(bytes.Trim(buffer[:n], "\x00")), nil
+}
