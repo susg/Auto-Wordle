@@ -46,9 +46,7 @@ func (rci *RulesCheckerImpl) unfixedLettersRule(wi models.WordleInfo, word strin
 		if !strings.Contains(word, letter) {
 			return false
 		}
-		// if !rci.letterExists(letter, word) {
-		// 	return false
-		// }
+
 		positions := positionsSet.GetAll()
 		for _, pos := range positions {
 			if string(word[pos.(int)]) == letter {
@@ -57,13 +55,4 @@ func (rci *RulesCheckerImpl) unfixedLettersRule(wi models.WordleInfo, word strin
 		}
 	}
 	return true
-}
-
-func (rci *RulesCheckerImpl) letterExists(letter, word string) bool {
-	for _, l := range word {
-		if string(l) == letter {
-			return true
-		}
-	}
-	return false
 }

@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/susg/autowordle/internal/words"
-	//"github.com/susg/autowordle/util"
 )
 
 type Validator interface {
