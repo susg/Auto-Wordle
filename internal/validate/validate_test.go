@@ -1,6 +1,10 @@
 package validate
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/susg/autowordle/internal/words"
+)
 
 func TestWordleValidator_Validate(t *testing.T) {
 	type fields struct {
@@ -53,6 +57,53 @@ func TestWordleValidator_Validate(t *testing.T) {
 			}
 			if err := wv.Validate(tt.args.input); (err != nil) != tt.wantErr {
 				t.Errorf("WordleValidator.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestNewWordleValidator(t *testing.T) {
+	originalSupportedWordLengths := words.SupportedWordLengths
+	defer func() { words.SupportedWordLengths = originalSupportedWordLengths }()
+	words.SupportedWordLengths = []int{4, 5, 6}
+
+	tests := []struct {
+		name       string
+		wordLength int
+		wantErr    bool
+	}{
+		{
+			name:       "supported word length 5",
+			wordLength: 5,
+			wantErr:    false,
+		},
+		{
+			name:       "supported word length 4",
+			wordLength: 4,
+			wantErr:    false,
+		},
+		{
+			name:       "unsupported word length 7",
+			wordLength: 7,
+			wantErr:    true,
+		},
+		{
+			name:       "unsupported word length 0",
+			wordLength: 0,
+			wantErr:    true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			validator, err := NewWordleValidator(tt.wordLength)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewWordleValidator() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if !tt.wantErr && validator == nil {
+				t.Errorf("Expected non-nil validator for supported word length %d", tt.wordLength)
+			}
+			if tt.wantErr && validator != nil {
+				t.Errorf("Expected nil validator for unsupported word length %d", tt.wordLength)
 			}
 		})
 	}
