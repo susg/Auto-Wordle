@@ -30,7 +30,6 @@ func StartWordManager(r reader.Reader) WordManager {
 			panic(err)
 		}
 		words := strings.Split(fileContent, "\n")
-		fmt.Printf("words len: %v\n", len(words))
 		wmi.wordsCache[wordLen] = words
 	}
 	return wmi
