@@ -34,19 +34,19 @@ func TestWordleValidator_Validate(t *testing.T) {
 		{
 			name:    "invalid input",
 			fields:  fields{wordLength: 5},
-			args:    args{input: []string{"aga", "gg", "by", "bb"}},
+			args:    args{input: []string{"aga", "gg", "by", "bb", "yy"}},
 			wantErr: true,
 		},
 		{
 			name:    "invalid letter",
 			fields:  fields{wordLength: 5},
-			args:    args{input: []string{"1g", "gg", "by", "bb"}},
+			args:    args{input: []string{"1g", "gg", "by", "bb", "yy"}},
 			wantErr: true,
 		},
 		{
 			name:    "invalid colour",
 			fields:  fields{wordLength: 5},
-			args:    args{input: []string{"aa", "gg", "by", "bb"}},
+			args:    args{input: []string{"aa", "gg", "by", "bb", "yy"}},
 			wantErr: true,
 		},
 	}
