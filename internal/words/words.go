@@ -43,5 +43,5 @@ func (wmi *WordManagerImpl) GetWords(wordLength int) ([]string, error) {
 }
 
 func createFilePath(wordLength int) string {
-	return fmt.Sprintf("/Users/sushant.gupta/Documents/NotBackedUp/Workspace/auto-wordle/data/prod/%d.txt", wordLength)
+	return fmt.Sprintf("data/prod/%d.txt", wordLength)
 }
