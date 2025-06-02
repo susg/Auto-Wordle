@@ -1,4 +1,4 @@
-![Go Version](https://img.shields.io/badge/go-1.22+-blue)
+![Go Version](https://img.shields.io/badge/go-1.23+-blue)
 # 🟩🟨⬜️ Auto Wordle
 
 Auto Wordle is a command-line application that helps you solve Wordle puzzles efficiently. Given your guesses and their feedback (green, yellow, black), Auto Wordle filters and suggests possible solutions.
@@ -12,12 +12,26 @@ Auto Wordle is a command-line application that helps you solve Wordle puzzles ef
 
 ## Usage
 
-1. **Run the application:**
+### Run the application:
+
+##### 1. Using Go locally
    ```sh
    go run main.go
    ```
 
-2. **Follow the prompts:**
+#### 2. Using Dockerfile
+```sh
+docker build -t autowordle .
+docker run -it autowordle
+```
+
+#### 3. Using Makefile
+```sh
+make build
+make run
+```
+
+### Follow the prompts:
 
 1) Enter the word length (e.g., 5).
 2) For each letter in your guess, enter a two-character string:
@@ -51,10 +65,12 @@ Filtered words: [along altar allow ...]
 - [`internal/filter`](internal/filter): Filters words based on rules
 - [`internal/validate`](internal/validate): Validates user input
 - [`internal/reader`](internal/reader): Efficient file reading
+- [`internal/orchestrator`](internal/orchestrator): Coordinates the game flow and logic
+- [`internal/models`](internal/models): Defines core data structures and types
 - [`data/prod/5.txt`](data/prod/5.txt): Word list for 5-letter words
 
 ## Requirements
-- Go 1.22+
+- Go 1.23+
 - Word lists in [`data/prod`](data/prod)
 
 ## License
