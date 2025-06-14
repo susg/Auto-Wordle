@@ -20,12 +20,10 @@ func TestStartWordManager(t *testing.T) {
 	defer ctrl.Finish()
 
 	m := mock_reader.NewMockReader(ctrl)
-	m.EXPECT().
-		ReadFile("data/prod/5.txt", 1024).
-		Return("hello\nworld", nil)
-	m.EXPECT().
-		ReadFile("data/prod/6.txt", 1024).
-		Return("lively\nstring", nil)
+	path1 := findProjectRoot() + "/data/prod/5.txt"
+	path2 := findProjectRoot() + "/data/prod/6.txt"
+	m.EXPECT().ReadFile(path1, 1024).Return("hello\nworld", nil)
+	m.EXPECT().ReadFile(path2, 1024).Return("lively\nstring", nil)
 
 	m2 := mock_reader.NewMockReader(ctrl)
 	m2.EXPECT().ReadFile(gomock.Any(), gomock.Any()).Return("", errors.New("file not found"))
@@ -142,7 +140,7 @@ func Test_createFilePath(t *testing.T) {
 		{
 			name: "success",
 			args: args{wordLength: 5},
-			want: "data/prod/5.txt",
+			want: findProjectRoot() + "/data/prod/5.txt",
 		},
 	}
 	for _, tt := range tests {
