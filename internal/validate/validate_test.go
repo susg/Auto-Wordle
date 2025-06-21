@@ -3,7 +3,7 @@ package validate
 import (
 	"testing"
 
-	"github.com/susg/autowordle/internal/words"
+	"github.com/susg/autowordle/internal/config"
 )
 
 func TestWordleValidator_Validate(t *testing.T) {
@@ -63,9 +63,8 @@ func TestWordleValidator_Validate(t *testing.T) {
 }
 
 func TestNewWordleValidator(t *testing.T) {
-	originalSupportedWordLengths := words.SupportedWordLengths
-	defer func() { words.SupportedWordLengths = originalSupportedWordLengths }()
-	words.SupportedWordLengths = []int{4, 5, 6}
+	cfg := config.GetConfig()
+	cfg.SupportedWordLengths = []int{4, 5, 6}
 
 	tests := []struct {
 		name       string
@@ -95,7 +94,7 @@ func TestNewWordleValidator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			validator, err := NewWordleValidator(tt.wordLength)
+			validator, err := NewWordleValidator(tt.wordLength, cfg)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewWordleValidator() error = %v, wantErr %v", err, tt.wantErr)
 			}

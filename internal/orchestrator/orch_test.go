@@ -5,15 +5,18 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/reader"
 	"github.com/susg/autowordle/internal/validate"
 	"github.com/susg/autowordle/internal/words"
 )
 
 func TestGenerateWords_Success(t *testing.T) {
+	cfg := config.GetConfig()
+	cfg.BaseWordsPath = "data/prod/"
 	wordLength := 5
-	wm := words.StartWordManager(reader.NewFileReader())
-	v, _ := validate.NewWordleValidator(wordLength)
+	wm := words.StartWordManager(reader.NewFileReader(), cfg)
+	v, _ := validate.NewWordleValidator(wordLength, cfg)
 	orch := NewWordleOrchestratorImpl(wordLength, wm, v)
 	words, _ := orch.GenerateWords([]string{"lb", "ib", "kb", "eb", "sy"})
 	len1 := len(words)
@@ -48,18 +51,20 @@ func TestGenerateWords_Success(t *testing.T) {
 }
 
 func TestGenerateWords_ValidationError(t *testing.T) {
+	cfg := config.GetConfig()
 	wordLength := 5
-	wm := words.StartWordManager(reader.NewFileReader())
-	v, _ := validate.NewWordleValidator(wordLength)
+	wm := words.StartWordManager(reader.NewFileReader(), cfg)
+	v, _ := validate.NewWordleValidator(wordLength, cfg)
 	orch := NewWordleOrchestratorImpl(wordLength, wm, v)
 	_, err := orch.GenerateWords([]string{"invalid", "input"})
 	assert.NotNil(t, err)
 }
 
 func TestNewWordleOrchestratorImpl_Panic(t *testing.T) {
+	cfg := config.GetConfig()
 	wordLength := 5
-	wm := words.StartWordManager(reader.NewFileReader())
-	v, _ := validate.NewWordleValidator(wordLength)
+	wm := words.StartWordManager(reader.NewFileReader(), cfg)
+	v, _ := validate.NewWordleValidator(wordLength, cfg)
 
 	assert.Panics(t, func() {
 		NewWordleOrchestratorImpl(0, wm, v)

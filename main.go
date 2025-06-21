@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/orchestrator"
 	"github.com/susg/autowordle/internal/reader"
 	"github.com/susg/autowordle/internal/validate"
@@ -15,7 +16,8 @@ func main() {
 	fmt.Println("*******************************************")
 	fmt.Println("*************** Auto Wordle ***************")
 	fmt.Println("*******************************************")
-	wm := words.StartWordManager(reader.NewFileReader())
+	appCfg := config.GetConfig()
+	wm := words.StartWordManager(reader.NewFileReader(), appCfg)
 	for {
 	start:
 		fmt.Print("\nEnter the word length (enter 'q' to quit): ")
@@ -32,7 +34,7 @@ func main() {
 			continue
 		}
 
-		v, err := validate.NewWordleValidator(wordLength)
+		v, err := validate.NewWordleValidator(wordLength, appCfg)
 		if err != nil {
 			fmt.Println("Error: ", err)
 			continue

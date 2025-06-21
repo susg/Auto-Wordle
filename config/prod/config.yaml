@@ -1,0 +1,10 @@
+baseWordsPath: data/prod/
+colours:
+  fixed: g
+  unfixed: y
+  excluded: b
+mandatoryFile: go.mod
+supportedWordLengths:
+  - 5
+fileChunkSize: 1024
+wordsBatchSize: 100

@@ -5,23 +5,24 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/reader"
+	"github.com/susg/autowordle/utils"
 
 	mock_reader "github.com/susg/autowordle/internal/reader/mock"
 	"go.uber.org/mock/gomock"
 )
 
 func TestStartWordManager(t *testing.T) {
-	origSupportedWordLengths := SupportedWordLengths
-	defer func() { SupportedWordLengths = origSupportedWordLengths }()
-	SupportedWordLengths = []int{5, 6}
+	cfg := config.GetConfig()
+	cfg.SupportedWordLengths = []int{5, 6}
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	m := mock_reader.NewMockReader(ctrl)
-	path1 := findProjectRoot() + "/data/prod/5.txt"
-	path2 := findProjectRoot() + "/data/prod/6.txt"
+	path1 := utils.FindProjectRoot() + "/data/test/5.txt"
+	path2 := utils.FindProjectRoot() + "/data/test/6.txt"
 	m.EXPECT().ReadFile(path1, 1024).Return("hello\nworld", nil)
 	m.EXPECT().ReadFile(path2, 1024).Return("lively\nstring", nil)
 
@@ -70,7 +71,7 @@ func TestStartWordManager(t *testing.T) {
 					t.Errorf("StartWordManager() panicked: %v", r)
 				}
 			}()
-			if got := StartWordManager(tt.args.r); !reflect.DeepEqual(got, tt.want) {
+			if got := StartWordManager(tt.args.r, cfg); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("StartWordManager() = %v, want %v", got, tt.want)
 			}
 		})
@@ -140,12 +141,14 @@ func Test_createFilePath(t *testing.T) {
 		{
 			name: "success",
 			args: args{wordLength: 5},
-			want: findProjectRoot() + "/data/prod/5.txt",
+			want: utils.FindProjectRoot() + "/data/test/5.txt",
 		},
 	}
+
+	cfg := config.GetConfig()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := createFilePath(tt.args.wordLength); got != tt.want {
+			if got := createFilePath(tt.args.wordLength, cfg); got != tt.want {
 				t.Errorf("createFilePath() = %v, want %v", got, tt.want)
 			}
 		})

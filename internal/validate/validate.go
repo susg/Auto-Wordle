@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/susg/autowordle/internal/words"
+	"github.com/susg/autowordle/internal/config"
 )
 
 type Validator interface {
@@ -15,8 +15,8 @@ type WordleValidator struct {
 	wordLength int
 }
 
-func NewWordleValidator(wordLength int) (Validator, error) {
-	if !slices.Contains(words.SupportedWordLengths, wordLength) {
+func NewWordleValidator(wordLength int, cfg config.Config) (Validator, error) {
+	if !slices.Contains(cfg.SupportedWordLengths, wordLength) {
 		return nil, fmt.Errorf("word length %d is not supported", wordLength)
 	}
 	return &WordleValidator{wordLength: wordLength}, nil
