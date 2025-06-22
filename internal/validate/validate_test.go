@@ -54,6 +54,7 @@ func TestWordleValidator_Validate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			wv := &WordleValidator{
 				wordLength: tt.fields.wordLength,
+				cfg:        config.GetConfig(),
 			}
 			if err := wv.Validate(tt.args.input); (err != nil) != tt.wantErr {
 				t.Errorf("WordleValidator.Validate() error = %v, wantErr %v", err, tt.wantErr)
