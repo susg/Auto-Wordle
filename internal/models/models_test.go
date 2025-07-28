@@ -3,11 +3,14 @@ package models
 import (
 	"testing"
 
+	"github.com/susg/autowordle/internal/config"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestWordleInfo(t *testing.T) {
-	wi := NewWordleInfo(5)
+	cfg := config.GetConfig()
+	wi := NewWordleInfo(5, cfg)
 	assert.Equal(t, 5, wi.WordLength)
 
 	wi.Update([]string{"bb", "ly", "ab", "mb", "eb"})

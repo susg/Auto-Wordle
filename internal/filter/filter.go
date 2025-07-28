@@ -1,6 +1,7 @@
 package filter
 
 import (
+	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/filter/rules"
 	"github.com/susg/autowordle/internal/models"
 )
@@ -14,9 +15,9 @@ type WordFiltererImpl struct {
 	rc rules.RulesChecker
 }
 
-func NewWordFiltererImpl(wordLength int, rc rules.RulesChecker) WordFilterer {
+func NewWordFiltererImpl(wordLength int, rc rules.RulesChecker, cfg config.Config) WordFilterer {
 	return &WordFiltererImpl{
-		wi: models.NewWordleInfo(wordLength),
+		wi: models.NewWordleInfo(wordLength, cfg),
 		rc: rc,
 	}
 }

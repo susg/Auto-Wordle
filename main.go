@@ -39,7 +39,7 @@ func main() {
 			fmt.Println("Error: ", err)
 			continue
 		}
-		orch := orchestrator.NewWordleOrchestratorImpl(wordLength, wm, v)
+		orch := orchestrator.NewWordleOrchestratorImpl(wordLength, wm, v, appCfg)
 		for {
 			var input []string
 			fmt.Print("\nEnter the input string (enter 'q' to start new game): ")

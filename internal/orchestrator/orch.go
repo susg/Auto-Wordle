@@ -1,6 +1,7 @@
 package orchestrator
 
 import (
+	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/filter"
 	"github.com/susg/autowordle/internal/filter/rules"
 	"github.com/susg/autowordle/internal/validate"
@@ -17,12 +18,12 @@ type WordleOrchestratorImpl struct {
 	words []string
 }
 
-func NewWordleOrchestratorImpl(wordLength int, wm words.WordManager, v validate.Validator) WordleOrchestrator {
+func NewWordleOrchestratorImpl(wordLength int, wm words.WordManager, v validate.Validator, cfg config.Config) WordleOrchestrator {
 	words, err := wm.GetWords(wordLength)
 	if err != nil {
 		panic(err)
 	}
-	wf := filter.NewWordFiltererImpl(wordLength, &rules.RulesCheckerImpl{})
+	wf := filter.NewWordFiltererImpl(wordLength, &rules.RulesCheckerImpl{}, cfg)
 	return &WordleOrchestratorImpl{
 		wf:    wf,
 		v:     v,

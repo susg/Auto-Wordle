@@ -17,7 +17,7 @@ func TestGenerateWords_Success(t *testing.T) {
 	wordLength := 5
 	wm := words.StartWordManager(reader.NewFileReader(), cfg)
 	v, _ := validate.NewWordleValidator(wordLength, cfg)
-	orch := NewWordleOrchestratorImpl(wordLength, wm, v)
+	orch := NewWordleOrchestratorImpl(wordLength, wm, v, cfg)
 	words, _ := orch.GenerateWords([]string{"lb", "ib", "kb", "eb", "sy"})
 	len1 := len(words)
 	assert.True(t, len1 > 0)
@@ -55,7 +55,7 @@ func TestGenerateWords_ValidationError(t *testing.T) {
 	wordLength := 5
 	wm := words.StartWordManager(reader.NewFileReader(), cfg)
 	v, _ := validate.NewWordleValidator(wordLength, cfg)
-	orch := NewWordleOrchestratorImpl(wordLength, wm, v)
+	orch := NewWordleOrchestratorImpl(wordLength, wm, v, cfg)
 	_, err := orch.GenerateWords([]string{"invalid", "input"})
 	assert.NotNil(t, err)
 }
@@ -67,6 +67,6 @@ func TestNewWordleOrchestratorImpl_Panic(t *testing.T) {
 	v, _ := validate.NewWordleValidator(wordLength, cfg)
 
 	assert.Panics(t, func() {
-		NewWordleOrchestratorImpl(0, wm, v)
+		NewWordleOrchestratorImpl(0, wm, v, cfg)
 	}, "Expected panic for invalid word length")
 }
