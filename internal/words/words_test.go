@@ -7,9 +7,9 @@ import (
 
 	"github.com/susg/autowordle/internal/config"
 	"github.com/susg/autowordle/internal/reader"
+	mock_reader "github.com/susg/autowordle/internal/reader/mock"
 	"github.com/susg/autowordle/utils"
 
-	mock_reader "github.com/susg/autowordle/internal/reader/mock"
 	"go.uber.org/mock/gomock"
 )
 
