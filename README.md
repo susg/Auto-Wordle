@@ -1,4 +1,5 @@
 ![Go Version](https://img.shields.io/badge/go-1.23+-blue)
+[![codecov](https://codecov.io/github/susg/auto-wordle/graph/badge.svg?token=NYGG689QS3)](https://codecov.io/github/susg/auto-wordle)
 # 🟩🟨⬜️ Auto Wordle
 
 Auto Wordle is a command-line application that helps you solve Wordle puzzles efficiently. Given your guesses and their feedback (green, yellow, black), Auto Wordle filters and suggests possible solutions.
