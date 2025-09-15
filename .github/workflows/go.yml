@@ -28,7 +28,9 @@ jobs:
       run: go test -v ./...
 
     - name: Run Test Coverage
-      run: go test -coverprofile=coverage.txt ./...
+      run: |
+      go test -coverprofile=coverage_full.txt ./...
+      cat coverage_full.txt| grep -v "mock" > coverage.txt
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
