@@ -31,6 +31,7 @@ jobs:
       run: |
         go test -coverprofile=coverage_full.txt ./...
         cat coverage_full.txt | grep -v "mock" > coverage.txt
+        rm coverage_full.txt
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
